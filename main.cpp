@@ -19,7 +19,6 @@
 #include "UDPSocket.h"
 #include "CellularLog.h"
 #include "CellularContext.h"
-#include "CellularPower.h"
 
 #define UDP 0
 #define TCP 1
@@ -205,11 +204,26 @@ nsapi_error_t test_send_recv()
 
     return -1;
 }
+DigitalOut led1(LED1);
+Thread blink_thread;
+#define STOP_FLAG 1
+
+extern "C" {
+extern void config_poweroffbycp(int enable);
+}
+void blink(DigitalOut *led) {
+	while (!ThisThread::flags_wait_any_for(STOP_FLAG, 1000)) {
+		*led = !*led;
+	}
+}
 
 int main()
 {
+	blink_thread.start(callback(blink, &led1));
     print_function("\n\nmbed-os-example-cellular\n");
     print_function("Establishing connection\n");
+	//while(1)
+	//	ThisThread::sleep_for(1000);
 #if MBED_CONF_MBED_TRACE_ENABLE
     trace_open();
 #else
@@ -224,7 +238,11 @@ int main()
 
     /* Attempt to connect to a cellular network */
     if (do_connect() == NSAPI_ERROR_OK) {
-        retcode = test_send_recv();
+		ThisThread::sleep_for(1000);
+		config_poweroffbycp(1);
+		while(1)
+			ThisThread::sleep_for(1000);
+
     }
 
     if (iface->disconnect() != NSAPI_ERROR_OK) {
@@ -232,11 +250,13 @@ int main()
     }
 
     ////// START TEST PSMP    /////////
+	/*
     wait(5);
     CellularContext *ctx = (CellularContext *)iface;
     CellularPower *pwr = ctx->get_device()->open_power();
     retcode = pwr->opt_power_save_mode(40, 4);
     while(1);
+	*/
     ////// END TEST PSMP    /////////
     if (retcode == NSAPI_ERROR_OK) {
         print_function("\n\nSuccess. Exiting \n\n");

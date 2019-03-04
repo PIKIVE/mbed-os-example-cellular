@@ -24,14 +24,15 @@
             "lwip.ethernet-enabled": false,
             "lwip.ppp-enabled": true,
             "lwip.tcp-enabled": true,
+			"lwip.l3ip-enabled": true,
             "platform.stdio-convert-newlines": true,
             "platform.stdio-baud-rate": 115200,
             "platform.default-serial-baud-rate": 115200,
-            "platform.stdio-buffered-serial": true,
+            "platform.stdio-buffered-serial": false,
             "cellular.debug-at": false,
             "nsapi.default-cellular-plmn": 0,
             "nsapi.default-cellular-sim-pin": 0,
-            "nsapi.default-cellular-apn": "\"iot\"",
+            "nsapi.default-cellular-apn": "\"kt.pilot.ip.ktnbiot\"",
             "nsapi.default-cellular-username": 0,
             "nsapi.default-cellular-password": 0
         }
