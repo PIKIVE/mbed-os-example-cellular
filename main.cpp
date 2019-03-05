@@ -238,10 +238,12 @@ int main()
 
     /* Attempt to connect to a cellular network */
     if (do_connect() == NSAPI_ERROR_OK) {
-		ThisThread::sleep_for(1000);
+		//ThisThread::sleep_for(1000);
+		wait_ms(1000);
 		config_poweroffbycp(1);
 		while(1)
-			ThisThread::sleep_for(1000);
+			wait_ms(1000);
+			//ThisThread::sleep_for(1000);
 
     }
 
